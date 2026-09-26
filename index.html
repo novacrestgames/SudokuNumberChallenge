@@ -1,1 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Sudoku Number Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --accent: #06b6d4;
+            --bg: #0f0f1a;
+            --surface: #1a1a2e;
+            --surface2: #16213e;
+            --border: #2a2a4a;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #1e3a5f 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(79,70,229,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(6,182,212,0.10) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 24px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(79,70,229,0.2);
+            border: 1px solid rgba(79,70,229,0.4);
+            border-radius: 50px;
+            padding: 6px 16px;
+            margin-bottom: 20px;
+        }
+
+        .game-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .game-badge span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .header h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .meta-item svg {
+            width: 14px;
+            height: 14px;
+            opacity: 0.7;
+        }
+
+        /* Main layout */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        /* Table of contents */
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 48px;
+        }
+
+        .toc h3 {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 8px;
+        }
+
+        .toc ol li {
+            counter-increment: toc-counter;
+        }
+
+        .toc ol li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 6px 0;
+            transition: color 0.2s;
+        }
+
+        .toc ol li a::before {
+            content: counter(toc-counter, decimal-leading-zero);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(79,70,229,0.15);
+            border-radius: 6px;
+            padding: 2px 7px;
+            min-width: 32px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .toc ol li a:hover {
+            color: var(--text);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 48px;
+            scroll-margin-top: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-number {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .section p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .section p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Info cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 12px;
+        }
+
+        .card h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .card a {
+            font-size: 13px;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Third party grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .service-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .service-card:hover {
+            border-color: var(--primary);
+        }
+
+        .service-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .service-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .service-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .service-card a {
+            font-size: 12px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Rights list */
+        .rights-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rights-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .rights-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .rights-list li strong {
+            color: var(--text);
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(79,70,229,0.1), rgba(6,182,212,0.08));
+            border: 1px solid rgba(79,70,229,0.3);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            background: rgba(245,158,11,0.08);
+            border: 1px solid rgba(245,158,11,0.25);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .warning-box .icon {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .warning-box p {
+            font-size: 14px;
+            color: #fbbf24;
+            margin-bottom: 0;
+        }
+
+        /* Contact card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .contact-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .contact-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .contact-email {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .contact-email:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .footer strong {
+            color: var(--text-muted);
+        }
+
+        /* Divider */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 32px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .toc ol {
+                grid-template-columns: 1fr;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-inner {
+                padding: 32px 20px 28px;
+            }
+            .container {
+                padding: 32px 20px 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <div class="header-inner">
+        <div class="game-badge">
+            <div class="dot"></div>
+            <span>Sudoku Number Challenge — Mobile Game</span>
+        </div>
+        <h1>Privacy Policy</h1>
+        <div class="header-meta">
+            <div class="meta-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                Last updated: September 26, 2026
+            </div>
+            <div class="meta-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                India
+            </div>
+            <div class="meta-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                Google Play - Android
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main -->
+<div class="container">
+
+    <!-- Intro -->
+    <div class="highlight-box" style="margin-bottom:48px;">
+        <p>This Privacy Policy explains how we collect, use, and protect your information when you play <strong>Sudoku Number Challenge</strong> on Android. We are committed to being transparent about our data practices. If you have any questions, please contact us at the bottom of this page.</p>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="toc">
+        <h3>Contents</h3>
+        <ol>
+            <li><a href="#information">Information We Collect</a></li>
+            <li><a href="#usage">How We Use Your Information</a></li>
+            <li><a href="#thirdparty">Third-Party Services</a></li>
+            <li><a href="#purchases">In-App Purchases</a></li>
+            <li><a href="#advertising">Advertising</a></li>
+            <li><a href="#storage">Data Storage</a></li>
+            <li><a href="#children">Children's Privacy</a></li>
+            <li><a href="#rights">Your Rights</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#changes">Changes to This Policy</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ol>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section" id="information">
+        <div class="section-header">
+            <div class="section-number">01</div>
+            <h2>Information We Collect</h2>
+        </div>
+
+        <p>We do not require you to create an account or provide any personal information to play Sudoku Number Challenge. However, certain information is collected automatically through third-party services we use to operate the App.</p>
+
+        <div class="card">
+            <h4>Automatically Collected Information</h4>
+            <p>The following information may be collected automatically when you use the App:</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+                <li style="display:flex;gap:10px;font-size:14px;color:#94a3b8;"><span style="color:#06b6d4;font-weight:700;flex-shrink:0;">→</span> Device information - model, OS version, unique device identifiers</li>
+                <li style="display:flex;gap:10px;font-size:14px;color:#94a3b8;"><span style="color:#06b6d4;font-weight:700;flex-shrink:0;">→</span> Gameplay events - levels started, completed, hints used, daily streaks</li>
+                <li style="display:flex;gap:10px;font-size:14px;color:#94a3b8;"><span style="color:#06b6d4;font-weight:700;flex-shrink:0;">→</span> Crash reports - diagnostic data when the App encounters errors</li>
+                <li style="display:flex;gap:10px;font-size:14px;color:#94a3b8;"><span style="color:#06b6d4;font-weight:700;flex-shrink:0;">→</span> Ad interaction data - information about ads served and viewed</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h4>Information You Provide</h4>
+            <p>The App does not require you to provide any personal information such as your name, email address, or phone number. No account creation is required. All game progress is stored locally on your device only.</p>
+        </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="usage">
+        <div class="section-header">
+            <div class="section-number">02</div>
+            <h2>How We Use Your Information</h2>
+        </div>
+        <p>The information collected through our third-party services is used solely to:</p>
+        <ul class="rights-list" style="margin-top:12px;">
+            <li><div><strong>Operate and improve the App</strong> - fix bugs and improve gameplay experience</div></li>
+            <li><div><strong>Display advertisements</strong> - serve relevant ads to support the free App</div></li>
+            <li><div><strong>Analyse crashes</strong> - identify and resolve technical issues quickly</div></li>
+            <li><div><strong>Understand usage patterns</strong> - improve game balance, difficulty, and features</div></li>
+            <li><div><strong>Process purchases</strong> - fulfil in-app purchases securely via Google Play</div></li>
+        </ul>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="thirdparty">
+        <div class="section-header">
+            <div class="section-number">03</div>
+            <h2>Third-Party Services</h2>
+        </div>
+        <p>The App integrates the following third-party services. Each service operates under its own Privacy Policy, which we encourage you to review.</p>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon" style="background:rgba(234,67,53,0.15);">📢</div>
+                <h4>Google AdMob</h4>
+                <p>Displays banner, interstitial, and rewarded video ads. May collect device identifiers to serve personalized or non-personalized ads.</p>
+                <a href="https://policies.google.com/privacy" target="_blank">View Privacy Policy →</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon" style="background:rgba(255,160,0,0.15);">📊</div>
+                <h4>Firebase Analytics</h4>
+                <p>Collects anonymous gameplay analytics to help us understand how the App is used and improve the experience.</p>
+                <a href="https://firebase.google.com/support/privacy" target="_blank">View Privacy Policy →</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon" style="background:rgba(239,68,68,0.15);">🛡️</div>
+                <h4>Firebase Crashlytics</h4>
+                <p>Collects crash reports and diagnostic data to help us identify and fix stability issues quickly.</p>
+                <a href="https://firebase.google.com/support/privacy" target="_blank">View Privacy Policy →</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon" style="background:rgba(79,70,229,0.15);">⚙️</div>
+                <h4>Unity Technologies</h4>
+                <p>The App is built with the Unity game engine, which may collect certain technical and performance data.</p>
+                <a href="https://unity.com/legal/privacy-policy" target="_blank">View Privacy Policy →</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon" style="background:rgba(16,185,129,0.15);">💳</div>
+                <h4>Google Play Billing</h4>
+                <p>Processes all in-app purchases securely. Payment information is handled entirely by Google and is never accessed by us.</p>
+                <a href="https://policies.google.com/privacy" target="_blank">View Privacy Policy →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="purchases">
+        <div class="section-header">
+            <div class="section-number">04</div>
+            <h2>In-App Purchases</h2>
+        </div>
+        <p>Sudoku Number Challenge offers optional in-app purchases including hint token packs and gem packs used to unlock themes. All purchases are optional - the game is fully playable without spending money.</p>
+
+        <div class="highlight-box">
+            <p>All payment processing is handled entirely and securely by <strong>Google Play Billing</strong>. We never collect, store, access, or process any payment card details or financial information. Purchase receipts are validated through Google's secure infrastructure.</p>
+        </div>
+
+        <p>Purchased items such as hint tokens and gems are stored locally on your device and are non-refundable.</p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="advertising">
+        <div class="section-header">
+            <div class="section-number">05</div>
+            <h2>Advertising</h2>
+        </div>
+        <p>The App displays advertisements provided by Google AdMob to support the free experience. The App shows the following ad types:</p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:16px 0 20px;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+                <div style="font-size:24px;margin-bottom:8px;">🏷️</div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Banner Ads</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Shown on menu screens</div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+                <div style="font-size:24px;margin-bottom:8px;">📱</div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Interstitial Ads</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Every few level completions</div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+                <div style="font-size:24px;margin-bottom:8px;">🎁</div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Rewarded Ads</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Optional - To earn free hint tokens</div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <div class="icon">ℹ️</div>
+            <p>Ads may be personalized based on your interests. You can opt out of personalized advertising at any time via <strong>Device Settings → Google → Ads → Opt out of Ads Personalization</strong>.</p>
+        </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="storage">
+        <div class="section-header">
+            <div class="section-number">06</div>
+            <h2>Data Storage</h2>
+        </div>
+
+        <div class="highlight-box">
+            <p>All game progress - including completed levels, hint tokens, gems, unlocked themes, and daily challenge streaks - is stored <strong>locally on your device only</strong>. This data is never transmitted to any server controlled by us and is not accessible to us at any time.</p>
+        </div>
+
+        <p>If you uninstall the App, all locally stored game data will be permanently deleted from your device. We recommend completing any in-progress purchases before uninstalling.</p>
+        <p>Data collected by third-party services such as Firebase and AdMob is retained in accordance with their respective data retention policies, linked above.</p>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section" id="security">
+        <div class="section-header">
+            <div class="section-number">09</div>
+            <h2>Security</h2>
+        </div>
+        <p>We take the security of your information seriously. All in-app purchases are processed through Google Play's secure, encrypted billing infrastructure. Game data is stored locally on your device and protected by your device's own security features.</p>
+        <p>Third-party services we use - Google Firebase, AdMob, and Unity - employ industry-standard security measures including encryption in transit and at rest. However, no method of electronic transmission or storage is 100% secure, and we cannot guarantee absolute security.</p>
+        <p>We encourage you to keep your device's operating system updated and to use a screen lock to protect your device and its data.</p>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="section" id="changes">
+        <div class="section-header">
+            <div class="section-number">8</div>
+            <h2>Changes to This Policy</h2>
+        </div>
+        <p>We may update this Privacy Policy from time to time to reflect changes in our practices, third-party services, or applicable laws. When we make changes, we will update the "Last updated" date at the top of this page.</p>
+        <p>We encourage you to review this Privacy Policy periodically. For significant changes, we will make reasonable efforts to notify you - for example, through a notice in the App. Your continued use of the App after any changes constitutes your acceptance of the updated Privacy Policy.</p>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="section" id="contact">
+        <div class="section-header">
+            <div class="section-number">9</div>
+            <h2>Contact Us</h2>
+        </div>
+        <p>If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please don't hesitate to reach out.</p>
+
+        <div class="contact-card">
+            <h3>Get in Touch</h3>
+            <p>Novacrest Games · Sudoku Number Challenge· India</p>
+            <a href="mailto:novacrestgames@gmail.com" class="contact-email">novacrestgames@gmail.com</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p> <strong>Sudoku Number Challenge</strong> · Novacrest Games · India </p>
+    <p style="margin-top:6px;">This privacy policy applies to the Sudoku Number Challenge mobile application available on Google Play Store.</p>
+</div>
+
+</body>
+</html>
